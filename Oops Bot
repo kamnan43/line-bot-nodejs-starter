@@ -1,0 +1,9 @@
+npm install
+
+{
+  "port" : "3000",
+  "channelAccessToken": "pZKCKrz1foFeudhXTww3wJBX9a/XwGdej1k6i1KBX2bRlz0Pc5cHNNHpg1VjlGLY9QQLALYmApxcEa+l/QvCr/U7GUa3lIFeX0jLA3UffgX3RpFPvc3J+fnJSZeL/px5NOtYuZ7JQU6PuPWvbz53dQdB04t89/1O/w1cDnyilFU=",
+  "channelSecret": "c79f99e6fdaa57c57e197b079c990fd7"
+}
+
+npm start
