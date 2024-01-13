@@ -5,7 +5,7 @@ const express = require('express');
 const config = require('./config.json');
 
 // create LINE SDK client
-const client = new line.Client(config);
+const client = new line.messagingApi.MessagingApiClient(config);
 
 const app = express();
 
@@ -18,11 +18,6 @@ app.post('/webhook', line.middleware(config), (req, res) => {
   // handle events separately
   Promise.all(req.body.events.map(event => {
     console.log('event', event);
-    // check verify webhook event
-    if (event.replyToken === '00000000000000000000000000000000' ||
-      event.replyToken === 'ffffffffffffffffffffffffffffffff') {
-      return;
-    }
     return handleEvent(event);
   }))
     .then(() => res.end())
@@ -33,12 +28,15 @@ app.post('/webhook', line.middleware(config), (req, res) => {
 });
 
 // simple reply function
-const replyText = (token, texts) => {
-  texts = Array.isArray(texts) ? texts : [texts];
-  return client.replyMessage(
-    token,
-    texts.map((text) => ({ type: 'text', text }))
-  );
+const replyText = (replyToken, text, quoteToken) => {
+  return client.replyMessage({
+    replyToken,
+    messages: [{
+      type: 'text',
+      text,
+      quoteToken
+    }]
+  });
 };
 
 // callback function to handle a single event
@@ -89,7 +87,7 @@ function handleEvent(event) {
 }
 
 function handleText(message, replyToken) {
-  return replyText(replyToken, message.text);
+  return replyText(replyToken, message.text, message.quoteToken);
 }
 
 function handleImage(message, replyToken) {
